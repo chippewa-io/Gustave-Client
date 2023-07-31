@@ -285,18 +285,19 @@ class Services {
         let semaphore = DispatchSemaphore(value: 0)  // 1. Create a semaphore
 
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            defer { semaphore.signal() }  // 3. Signal the semaphore when the task is done
+            defer { semaphore.signal() }  // Signal the semaphore when the task is done
 
             guard let data = data, error == nil else {
                 //print("Error: \(error?.localizedDescription ?? "Unknown error")")
                 return
             }
-            if let responseJSON = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-                print(responseJSON)
-            }
+            
+            // This will print the raw JSON vibes from the Flask server
+            print(String(data: data, encoding: .utf8) ?? "Error decoding data")
         }
         task.resume()
 
-        semaphore.wait()  // 2. Wait for the semaphore to be signaled before returning from the function
+        semaphore.wait()  // Wait for the semaphore to be signaled before returning from the function
     }
+
 }
