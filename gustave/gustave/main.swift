@@ -37,7 +37,6 @@ class Spinner {
         if !silent {
             print("\r ", terminator: "")
             print("\n", terminator: "")
-            print("Success!")
             fflush(stdout)
         }
     }

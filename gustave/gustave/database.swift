@@ -38,6 +38,18 @@ class Database {
         }
     }
     
+    func getMostRecentSecret() -> (secret: String, expiration: String)? {
+        do {
+            if let row = try db?.pluck(secrets.order(id.desc)) {
+                return (row[secret], row[expiration])
+            }
+        } catch {
+            //print("Cannot retrieve secret: \(error)")
+            os_log(.error, log: log, "Cannot retrieve secret: %{public}@", error.localizedDescription)
+        }
+        return nil
+    }
+    
     func getUnexpiredSecret() -> (secret: String, expiration: String)? {
         if let mostRecentSecretData = getMostRecentSecret() {
             let currentTime = Int(Date().timeIntervalSince1970) // Get the current time in seconds
@@ -72,19 +84,6 @@ class Database {
 
         }
     }
-    
-    func getMostRecentSecret() -> (secret: String, expiration: String)? {
-        do {
-            if let row = try db?.pluck(secrets.order(id.desc)) {
-                return (row[secret], row[expiration])
-            }
-        } catch {
-            //print("Cannot retrieve secret: \(error)")
-            os_log(.error, log: log, "Cannot retrieve secret: %{public}@", error.localizedDescription)
-        }
-        return nil
-    }
-
 
     func insertSecret(secret: String, expiration: String) {
         let insert = secrets.insert(self.secret <- secret, self.expiration <- expiration)

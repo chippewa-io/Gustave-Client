@@ -184,6 +184,7 @@ class Services {
         task.resume()
         semaphore.wait()  // 2. Wait for the semaphore to be signaled before returning from the function
         self.deleteProfileWithUDID(silent: silent, secretGenerationCompleted: &secretGenerationCompleted)
+        print("Successfully Initialized!")
     }
 
 
