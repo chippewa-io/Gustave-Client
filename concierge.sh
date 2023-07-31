@@ -1,6 +1,7 @@
 #!/bin/zsh
 
 
+
 function concierge {
 
   regex='^[a-fA-F0-9]{32}$'
